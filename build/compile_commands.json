@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/jochemarends/dev/snake/build",
+  "command": "/usr/bin/c++  -I/home/jochemarends/dev/snake/inc -std=gnu++23 -Werror -Wall -Wextra -pedantic -o CMakeFiles/snake.dir/src/main.cpp.o -c /home/jochemarends/dev/snake/src/main.cpp",
+  "file": "/home/jochemarends/dev/snake/src/main.cpp",
+  "output": "CMakeFiles/snake.dir/src/main.cpp.o"
+}
+]
