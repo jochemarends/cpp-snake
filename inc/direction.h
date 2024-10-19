@@ -18,15 +18,17 @@ constexpr sf::Vector2<T> to_vec(direction dir) {
 
     switch (dir) {
     case direction::up:
-        --res.y = static_cast<T>(-1);
+        res.y = static_cast<T>(-1);
         break;
     case direction::down:
         res.y = static_cast<T>(1);
+        break;
     case direction::left:
         res.x = static_cast<T>(-1);
         break;
     case direction::right:
         res.x = static_cast<T>(1);
+        break;
     }
 
     return res;
