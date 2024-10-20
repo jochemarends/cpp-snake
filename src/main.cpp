@@ -1,7 +1,8 @@
+#include "direction.h"
 #include <cstdlib>
 #include <print>
 #include <SFML/Graphics.hpp>
-#include <grid.h>
+#include <game.h>
 
 void handle_event(sf::Window& window, sf::Event& event) {
     if (event.type == sf::Event::Closed) {
@@ -11,17 +12,27 @@ void handle_event(sf::Window& window, sf::Event& event) {
 
 int main() try {
     sf::RenderWindow window{sf::VideoMode{800, 600}, "snake"};
-    snake::grid<4, 4> grid{sf::Vector2f{0, 0}, 100};
-    grid.fill({0, 0}, sf::Color::Green);
+
+    // number of ticks per second
+    constexpr float tick_rate{2.0f};
+    sf::Clock clock{};
+    snake::game game{};
     
     while (window.isOpen()) {
         sf::Event event{};
         while (window.pollEvent(event)) {
             handle_event(window, event);
+            game.handle_event(event);
         }
 
         window.clear(sf::Color::Black);
-        window.draw(grid);
+
+        if (clock.getElapsedTime().asSeconds() > (1.0f / tick_rate)) {
+            game.tick();
+            clock.restart();
+        }
+
+        window.draw(game);
         window.display();
     }
 }
@@ -31,5 +42,6 @@ catch (const std::exception& e) {
 }
 catch (...) {
     std::println(stderr, "an unknown error occurred");
+    return EXIT_FAILURE;
 }
 
