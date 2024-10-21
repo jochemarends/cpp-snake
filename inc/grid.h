@@ -2,7 +2,7 @@
 #define GRID_H
 
 #include <cstddef>
-#include <map>
+#include <ranges>
 #include <stdexcept>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -54,17 +54,19 @@ struct grid : sf::Drawable {
      * @return A two-component vector where the first and second component equal the amount of rows and columns of the grid respectively.
      */
     sf::Vector2<std::size_t> dims() const;
+
+    template<typename Self>
+    auto&& tiles(this Self&& self, std::size_t row, std::size_t column);
+
+    template<typename Self>
+    auto&& operator[](this Self&& self, std::size_t row, std::size_t column);
 private:
-    struct cmp {
-        bool operator()(sf::Vector2<std::size_t> a, sf::Vector2<std::size_t> b) const {
-            return std::tie(a.x, a.y) < std::tie(b.x, b.y);
-        }
-    };
+    auto indices() const;
 
     /**
      * Consider using a hash table, however, SFML's vector is not hashable.
      */
-    std::map<sf::Vector2<std::size_t>, sf::Color, cmp> tiles_{};
+    std::array<sf::Color, Rows * Columns> tiles_{};
     sf::Vector2f top_left_{};
     std::size_t tile_size_{};
 };
@@ -76,13 +78,14 @@ void grid<Rows, Columns>::draw(sf::RenderTarget& target, sf::RenderStates states
     tile.setOutlineColor(sf::Color::Black);
     tile.setOutlineThickness(-(grid::line_width / 2.0f));
     
-    for (auto [index, color] : tiles_) {
+    for (auto [row, column] : indices()) {
         sf::Vector2f pos{top_left_};
 
         // using row-major indices!
-        pos.y += static_cast<float>(index.x * tile_size_);
-        pos.x += static_cast<float>(index.y * tile_size_);
+        pos.y += static_cast<float>(row * tile_size_);
+        pos.x += static_cast<float>(column * tile_size_);
 
+        sf::Color color{operator[](row, column)};
         tile.setPosition(pos.x, pos.y);
         tile.setFillColor(color);
         target.draw(tile, states);
@@ -91,19 +94,18 @@ void grid<Rows, Columns>::draw(sf::RenderTarget& target, sf::RenderStates states
 
 template<std::size_t Rows, std::size_t Columns>
 grid<Rows, Columns>::grid(sf::Vector2f top_left, std::size_t tile_size)
-    :top_left_{top_left}, tile_size_{tile_size} {}
+    :top_left_{top_left}, tile_size_{tile_size} {
+    clear();
+}
 
 template<std::size_t Rows, std::size_t Columns>
 void grid<Rows, Columns>::fill(sf::Vector2<std::size_t> index, sf::Color color) {
-    if (index.x >= Rows || index.x < 0 || index.y >= Columns || index.y < 0) {
-        throw std::out_of_range{"attempt to fill an out of range tile"};
-    }
-    tiles_[index] = color;
+    operator[](index.x, index.y) = color;
 }
 
 template<std::size_t Rows, std::size_t Columns>
 void grid<Rows, Columns>::clear() {
-    tiles_.clear();
+    std::ranges::fill(tiles_, sf::Color::Transparent);
 }
 
 template<std::size_t Rows, std::size_t Columns>
@@ -124,6 +126,28 @@ std::size_t grid<Rows, Columns>::tile_size() const {
 template<std::size_t Rows, std::size_t Columns>
 sf::Vector2<std::size_t> grid<Rows, Columns>::dims() const {
     return sf::Vector2{Rows, Columns};
+}
+
+template<std::size_t Rows, std::size_t Columns>
+template<typename Self>
+auto&& grid<Rows, Columns>::tiles(this Self&& self, std::size_t row, std::size_t column) {
+    return self.tiles_[row * Columns + column];
+}
+
+template<std::size_t Rows, std::size_t Columns>
+template<typename Self>
+auto&& grid<Rows, Columns>::operator[](this Self&& self, std::size_t row, std::size_t column) {
+    if (row >= Rows || column >= Columns) {
+        throw std::out_of_range{"attempt to fill an out of range tile"};
+    }
+    return self.tiles_[row * Columns + column];
+}
+
+template<std::size_t Rows, std::size_t Columns>
+auto grid<Rows, Columns>::indices() const {
+    auto row_indices = std::views::iota(0zu, Rows);
+    auto column_indices = std::views::iota(0zu, Columns);
+    return std::views::cartesian_product(row_indices, column_indices);
 }
 
 }

@@ -6,6 +6,7 @@
 #include <direction.h>
 #include <grid.h>
 #include <keymap.h>
+#include <apple.h>
 
 namespace snake {
 
@@ -17,10 +18,16 @@ struct game : sf::Drawable {
      */
     void tick();
     
+    void draw();
+
+    void handle_collisions();
+
     void handle_event(const sf::Event& e);
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
+    void spawn_apple();
+
     // grid constants
     static constexpr std::size_t tile_size_{100zu};
     static constexpr std::size_t rows_{5zu};
@@ -32,6 +39,7 @@ private:
     keymap keymap_{};
     grid<rows_, columns_> grid_{{}, tile_size_};
     snake snake_{start_pos_};
+    std::vector<apple> apples_{};
     direction direction_{direction::left};
 };
 

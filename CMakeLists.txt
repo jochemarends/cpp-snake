@@ -6,7 +6,7 @@ project(snake LANGUAGES CXX)
 
 find_package(SFML 2.5.1 COMPONENTS graphics audio network system REQUIRED)
 
-add_executable(snake src/main.cpp src/snake.cpp src/game.cpp)
+add_executable(snake src/main.cpp src/game.cpp src/snake.cpp src/apple.cpp)
 
 target_include_directories(snake PRIVATE inc)
 

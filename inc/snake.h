@@ -2,12 +2,14 @@
 #define SNAKE_H
 
 #include <deque>
+#include <iterator>
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <direction.h>
 #include <grid.h>
 #include <utility.h>
+#include <vector>
 
 namespace snake {
 
@@ -33,10 +35,18 @@ struct snake {
     /**
     * Draw the snake on a grid.
     * 
-    * @parm grid Grid to draw the snake on.
+    * @param grid Grid to draw the snake on.
     */
     template<std::size_t Rows, std::size_t Columns>
     void draw(grid<Rows, Columns>& grid) const;
+
+    /**
+    * Obtain the indices the snake would occupy on a certain grid.
+    *
+    * @param out Output iterator where indices will be written to.
+    */
+    template<std::size_t Rows, std::size_t Columns, std::output_iterator<sf::Vector2<std::size_t>> OutputIt>
+    void copy_indices(OutputIt out) const;
 private: 
     sf::Vector2i head_{};
     std::deque<direction> tail_{};
@@ -44,26 +54,43 @@ private:
 
 template<std::size_t Rows, std::size_t Columns>
 void snake::draw(grid<Rows, Columns>& grid) const {
-    const auto [rows, columns] = grid.dims();
-
     sf::Vector2i pos{head_};
+
     // map the head to a valid grid index
-    pos.x = wrap<int>(pos.x, 0, rows - 1);
-    pos.y = wrap<int>(pos.y, 0, columns - 1);
+    pos.x = wrap<int>(pos.x, 0, Rows - 1);
+    pos.y = wrap<int>(pos.y, 0, Columns - 1);
     grid.fill(sf::Vector2<std::size_t>(pos), snake::color);
     
-    for (direction dir : tail_) {
-        // render tiles in opposite direction
-        sf::Vector2 offset = -1 * to_vec<int, layout::row_major>(dir);
+    std::vector<sf::Vector2<std::size_t>> indices{};
+    copy_indices<Rows, Columns>(std::back_inserter(indices));
 
-        // map the position to a valid grid index
-        pos.x = wrap<int>(pos.x + offset.x, 0, rows - 1);
-        pos.y = wrap<int>(pos.y + offset.y, 0, columns - 1);
-
-        grid.fill(sf::Vector2<std::size_t>(pos), snake::color);
+    for (sf::Vector2<std::size_t> index : indices) {
+        grid.fill(index, snake::color);
     }
 }
 
+template<std::size_t Rows, std::size_t Columns, std::output_iterator<sf::Vector2<std::size_t>> OutputIt>
+void snake::copy_indices(OutputIt out) const {
+    sf::Vector2i index{head_};
+
+    // map the position to a valid grid index
+    index.x = wrap<int>(index.x, 0, Rows - 1);
+    index.y = wrap<int>(index.y, 0, Columns - 1);
+
+    out++ = sf::Vector2<std::size_t>(index);
+
+    for (direction dir : tail_) {
+        // render tiles in opposite direction
+        index += -1 * to_vec<int, layout::row_major>(dir);
+
+        // map the position to a valid grid index
+        index.x = wrap<int>(index.x, 0, Rows - 1);
+        index.y = wrap<int>(index.y, 0, Columns - 1);
+
+        out++ = sf::Vector2<std::size_t>(index);
+    }
+}
+    
 }
 
 #endif
