@@ -13,7 +13,7 @@ namespace snake {
 
 template<std::size_t Rows, std::size_t Columns>
 struct grid : sf::Drawable {
-    static constexpr std::size_t line_width{20};
+    static constexpr std::size_t line_width{10};
 
     grid(sf::Vector2f top_left, std::size_t tile_size);
 

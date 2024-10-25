@@ -1,4 +1,3 @@
-#include "direction.h"
 #include <cstdlib>
 #include <print>
 #include <SFML/Graphics.hpp>
@@ -11,12 +10,15 @@ void handle_event(sf::Window& window, sf::Event& event) {
 }
 
 int main() try {
-    sf::RenderWindow window{sf::VideoMode{800, 600}, "snake"};
+    sf::VideoMode video_mode{snake::game::width, snake::game::height};
+    sf::RenderWindow window{video_mode, "snake"};
 
     // number of ticks per second
-    constexpr float tick_rate{2.0f};
+    constexpr float tick_rate{4.0f};
     sf::Clock clock{};
-    snake::game game{};
+
+    sf::Vector2f top_left{};
+    snake::game game{top_left};
     
     while (window.isOpen()) {
         sf::Event event{};

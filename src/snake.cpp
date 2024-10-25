@@ -36,5 +36,14 @@ void snake::grow(direction dir) {
     tail_.push_front(dir);
 }
 
+void snake::pop_tail() {
+    tail_.clear();
+}
+
+std::size_t snake::length() const {
+    // tail + head
+    return tail_.size() + 1;
+}
+
 }
 

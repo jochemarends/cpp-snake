@@ -1,46 +1,37 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include <SFML/Window/Event.hpp>
-#include <snake.h>
-#include <direction.h>
-#include <grid.h>
 #include <keymap.h>
-#include <apple.h>
+#include <level.h>
 
 namespace snake {
 
 struct game : sf::Drawable {
-    game(keymap keymap = vi_keymap);
+    game(sf::Vector2f top_left);
 
-    /**
-     * Handler the game's logic.
-     */
     void tick();
-    
-    void draw();
-
-    void handle_collisions();
 
     void handle_event(const sf::Event& e);
 
+    void update_top_bar();
+
+    void draw_border(sf::RenderTarget& target, sf::RenderStates states) const;
+
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+    static constexpr std::size_t top_bar_height{60};
+    static constexpr std::size_t width{level::width};
+    static constexpr std::size_t height{top_bar_height + level::height};
 private:
-    void spawn_apple();
+    sf::Font font_{};
+    sf::Text text_{};
 
-    // grid constants
-    static constexpr std::size_t tile_size_{100zu};
-    static constexpr std::size_t rows_{5zu};
-    static constexpr std::size_t columns_{5zu};
-
-    // snake constants
-    static inline const sf::Vector2 start_pos_{0, 0};
-
-    keymap keymap_{};
-    grid<rows_, columns_> grid_{{}, tile_size_};
-    snake snake_{start_pos_};
-    std::vector<apple> apples_{};
-    direction direction_{direction::left};
+    std::size_t score_{};
+    keymap keymap_{vi_keymap};
+    level level_;
 };
 
 }

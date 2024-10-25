@@ -32,6 +32,13 @@ struct snake {
      */
     void grow(direction dir);
 
+    void pop_tail();
+
+    /**
+     * Obtain the length of the snake in tiles.
+     */
+    std::size_t length() const;
+
     /**
     * Draw the snake on a grid.
     * 
