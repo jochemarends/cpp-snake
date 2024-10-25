@@ -45,5 +45,9 @@ std::size_t snake::length() const {
     return tail_.size() + 1;
 }
 
+sf::Vector2i snake::head() const {
+    return head_;
+}
+
 }
 

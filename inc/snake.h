@@ -40,6 +40,11 @@ struct snake {
     std::size_t length() const;
 
     /**
+     * Obtain the position of the the snake's head.
+     */
+    sf::Vector2i head() const;
+
+    /**
     * Draw the snake on a grid.
     * 
     * @param grid Grid to draw the snake on.

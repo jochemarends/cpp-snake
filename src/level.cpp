@@ -12,6 +12,7 @@ level::level(sf::Vector2f top_left)
 void level::tick() {
     if (!is_dead_) {
         curr_direction_ = next_direction_;
+        // move with wraparound
         snake_.move(curr_direction_);
         handle_collisions();
         draw();
