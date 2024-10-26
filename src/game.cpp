@@ -36,7 +36,10 @@ void game::tick() {
 }
 
 void game::update_top_bar() {
-    score_text_.setString(std::format("{}", level_.score()));
+    // keep old score until a new attempt starts
+    if (!level_.is_dead() || score_text_.getString().isEmpty()) {
+        score_text_.setString(std::format("{}", level_.score()));
+    }
 }
 
 void game::handle_event(const sf::Event& e) {
