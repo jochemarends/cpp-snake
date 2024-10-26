@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-configure_file(./libertine.ttf ./libertine.ttf COPYONLY)
+configure_file(./SpaceMono-Regular.ttf ./SpaceMono-Regular.ttf COPYONLY)
 
 project(snake LANGUAGES CXX)
 

@@ -31,7 +31,7 @@ struct level : sf::Drawable {
     /**
      * Check whether the level is played.
      */
-    bool is_dead();
+    bool is_dead() const;
 
     void restart();
 

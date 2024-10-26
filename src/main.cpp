@@ -13,6 +13,9 @@ int main() try {
     sf::VideoMode video_mode{snake::game::width, snake::game::height};
     sf::RenderWindow window{video_mode, "snake"};
 
+    // prevent SFML from writing errors to the terminal 
+    sf::err().rdbuf(nullptr);
+
     // number of ticks per second
     constexpr float tick_rate{4.0f};
     sf::Clock clock{};

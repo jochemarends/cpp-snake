@@ -7,10 +7,26 @@ namespace snake {
 
 game::game(sf::Vector2f top_left)
     :level_{sf::Vector2f{top_left.x, top_left.y + top_bar_height}} {
-    font_.loadFromFile("./libertine.ttf");
-    text_.setFont(font_);
-    text_.setCharacterSize(game::top_bar_height * 0.8);
-    text_.setFillColor(sf::Color::White);
+    
+    // load font
+    if (!font_.loadFromFile(game::font_file_path)) {
+        throw std::runtime_error{std::format("failed to load font from \"{}\"", game::font_file_path)};
+    }
+
+    // configure score text
+    score_text_.setFont(font_);
+    score_text_.setCharacterSize(game::top_bar_height * 0.8);
+    score_text_.setFillColor(sf::Color::White);
+
+    // configure start prompt text
+    start_text_.setFont(font_);
+    start_text_.setFillColor(sf::Color::White);
+    start_text_.setString("press any key to start");
+    // center text
+start_text_.setOrigin(start_text_.getGlobalBounds().getSize() / 2.0f + start_text_.getLocalBounds().getPosition());
+    start_text_.setPosition(game::width / 2.0, game::height / 2.0);
+    start_text_.setScale(0.75, 0.75);
+
     update_top_bar();
 }
 
@@ -20,11 +36,11 @@ void game::tick() {
 }
 
 void game::update_top_bar() {
-    text_.setString(std::format("score: {}", level_.score()));
+    score_text_.setString(std::format("{}", level_.score()));
 }
 
 void game::handle_event(const sf::Event& e) {
-    if (level_.is_dead()) {
+    if (e.type == sf::Event::KeyPressed && level_.is_dead()) {
         level_.restart();
     }
     
@@ -48,7 +64,11 @@ void game::draw_border(sf::RenderTarget& target, sf::RenderStates states) const 
 void game::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(level_, states);
     draw_border(target, states);
-    target.draw(text_, states);
+    target.draw(score_text_, states);
+
+    if (level_.is_dead()) {
+        target.draw(start_text_, states);
+    }
 }
 
 }

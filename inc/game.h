@@ -25,9 +25,12 @@ struct game : sf::Drawable {
     static constexpr std::size_t top_bar_height{60};
     static constexpr std::size_t width{level::width};
     static constexpr std::size_t height{top_bar_height + level::height};
+
+    static inline const std::string font_file_path{"./SpaceMono-Regular.ttf"};
 private:
     sf::Font font_{};
-    sf::Text text_{};
+    sf::Text score_text_{};
+    sf::Text start_text_{};
 
     std::size_t score_{};
     keymap keymap_{vi_keymap};

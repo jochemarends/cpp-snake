@@ -79,7 +79,7 @@ void level::handle_event(const sf::Event& e, const keymap& keymap) {
     }
 }
 
-bool level::is_dead() {
+bool level::is_dead() const {
     return is_dead_;
 }
 
