@@ -23,7 +23,7 @@ game::game(sf::Vector2f top_left)
     start_text_.setFillColor(sf::Color::White);
     start_text_.setString("press any key to start");
     // center text
-start_text_.setOrigin(start_text_.getGlobalBounds().getSize() / 2.0f + start_text_.getLocalBounds().getPosition());
+    start_text_.setOrigin(start_text_.getGlobalBounds().getSize() / 2.0f + start_text_.getLocalBounds().getPosition());
     start_text_.setPosition(game::width / 2.0, game::height / 2.0);
     start_text_.setScale(0.75, 0.75);
 
