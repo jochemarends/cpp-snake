@@ -1,8 +1,8 @@
-#include <utility>
-#include <stdexcept>
-#include <ranges>
-#include <SFML/Graphics/RectangleShape.hpp>
 #include <snake.h>
+#include <ranges>
+#include <stdexcept>
+#include <utility>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <direction.h>
 
 namespace snake {
@@ -47,6 +47,10 @@ std::size_t snake::length() const {
 
 sf::Vector2i snake::head() const {
     return head_;
+}
+
+void snake::head(sf::Vector2i position) {
+    head_ = position;
 }
 
 }

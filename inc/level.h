@@ -33,6 +33,8 @@ struct level : sf::Drawable {
      */
     bool is_dead() const;
 
+    void reset();
+
     void restart();
 
     std::size_t score() const;
@@ -46,9 +48,15 @@ struct level : sf::Drawable {
     static constexpr std::size_t width{columns * tile_size};
     static constexpr std::size_t height{rows * tile_size};
 
-    static inline const sf::Vector2i start_pos{width, height};
-    static inline const direction start_dir{direction::right};
+    static inline const sf::Vector2i start_position{rows / 2, 1};
+    static inline const direction start_direction{direction::right};
+    static inline const std::size_t start_length{2zu};
 private:
+    /**
+     * Check whether a position is an invalid grid index.
+     */
+    static bool out_of_bounds(sf::Vector2i position);
+
     /**
      * Spawn apple on a random and unoccupied tile of the grid.
      */
@@ -60,11 +68,11 @@ private:
     void die();
 
     bool is_dead_{true};
-    direction curr_direction_{start_dir};
+    direction curr_direction_{start_direction};
     direction next_direction_{curr_direction_};
 
     grid<rows, columns> grid_;
-    struct snake snake_{start_pos};
+    struct snake snake_{start_position};
     std::vector<apple> apples_{};
 };
 

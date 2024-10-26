@@ -5,6 +5,7 @@ namespace snake {
     
 level::level(sf::Vector2f top_left)
     :grid_{top_left, level::tile_size} {
+    die();
     spawn_apple();
     draw();
 }
@@ -29,6 +30,10 @@ void level::draw() {
 }
 
 void level::handle_collisions() {
+    if (level::out_of_bounds(snake_.head())) {
+        die();
+    }
+
     std::vector<sf::Vector2<std::size_t>> snake_indices{};
     snake_.copy_indices<level::rows, level::columns>(std::back_inserter(snake_indices));
 
@@ -83,17 +88,32 @@ bool level::is_dead() const {
     return is_dead_;
 }
 
-void level::restart() {
+void level::reset() {
+    snake_.head(start_position);
+
     snake_.pop_tail();
+    for (auto _ : std::views::iota(0zu, level::start_length - 1zu)) {
+        snake_.grow(level::start_direction);
+    }
+}
+
+void level::restart() {
+    reset();
     is_dead_ = false;
 }
 
 std::size_t level::score() const {
-    return snake_.length() - 1zu; 
+    return snake_.length() - level::start_length; 
 }
 
 void level::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(grid_, states);
+}
+
+bool level::out_of_bounds(sf::Vector2i position) {
+    // using row-major coordinates
+    return position.x < 0 || std::cmp_greater_equal(position.x, level::rows)
+        || position.y < 0 || std::cmp_greater_equal(position.y, level::columns);
 }
 
 void level::spawn_apple() {
@@ -117,6 +137,7 @@ void level::spawn_apple() {
 
 void level::die() {
     is_dead_ = true;
+    reset();
 }
 
 }
