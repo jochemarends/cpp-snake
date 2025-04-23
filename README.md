@@ -1,6 +1,6 @@
 # C++ Snake
 
-A snake game writting in C++23 using SFML 3.0.
+A snake game written in C++23 using SFML 3.0.
 
 ![Screenshot](images/screenshot.png)
 
