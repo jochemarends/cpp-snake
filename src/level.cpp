@@ -59,19 +59,19 @@ void level::handle_event(const sf::Event& e, const keymap& keymap) {
         return;
     }
 
-    if (e.type == sf::Event::KeyPressed) {
+    if (const auto* key = e.getIf<sf::Event::KeyPressed>()) {
         std::optional<direction> input_direction{};
 
-        if (e.key.code == keymap.up) {
+        if (key->code == keymap.up) {
             input_direction = direction::up;
         }
-        else if (e.key.code == keymap.down) {
+        else if (key->code == keymap.down) {
             input_direction = direction::down;
         }
-        else if (e.key.code == keymap.left) {
+        else if (key->code == keymap.left) {
             input_direction = direction::left;
         }
-        else if (e.key.code == keymap.right) {
+        else if (key->code == keymap.right) {
             input_direction = direction::right;
         }
 

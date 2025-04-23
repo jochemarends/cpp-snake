@@ -1,16 +1,17 @@
 #include <cstdlib>
 #include <print>
+#include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <game.h>
 
 void handle_event(sf::Window& window, sf::Event& event) {
-    if (event.type == sf::Event::Closed) {
+    if (event.is<sf::Event::Closed>()) {
         window.close();
     }
 }
 
 int main() try {
-    sf::VideoMode video_mode{snake::game::width, snake::game::height};
+    sf::VideoMode video_mode{{snake::game::width, snake::game::height}};
     sf::RenderWindow window{video_mode, "snake"};
 
     // prevent SFML from writing errors to the terminal 
@@ -24,10 +25,10 @@ int main() try {
     snake::game game{top_left};
     
     while (window.isOpen()) {
-        sf::Event event{};
-        while (window.pollEvent(event)) {
-            handle_event(window, event);
-            game.handle_event(event);
+        // sf::Event event{};
+        while (auto event = window.pollEvent()) {
+            handle_event(window, *event);
+            game.handle_event(*event);
         }
 
         window.clear(sf::Color::Black);

@@ -9,7 +9,7 @@ game::game(sf::Vector2f top_left)
     :level_{sf::Vector2f{top_left.x, top_left.y + top_bar_height}} {
     
     // load font
-    if (!font_.loadFromFile(game::font_file_path)) {
+    if (!font_.openFromFile(game::font_file_path)) {
         throw std::runtime_error{std::format("failed to load font from \"{}\"", game::font_file_path)};
     }
 
@@ -23,9 +23,9 @@ game::game(sf::Vector2f top_left)
     start_text_.setFillColor(sf::Color::White);
     start_text_.setString("press any key to start");
     // center text
-    start_text_.setOrigin(start_text_.getGlobalBounds().getSize() / 2.0f + start_text_.getLocalBounds().getPosition());
-    start_text_.setPosition(game::width / 2.0, game::height / 2.0);
-    start_text_.setScale(0.75, 0.75);
+    start_text_.setOrigin(start_text_.getGlobalBounds().position / 2.0f + start_text_.getLocalBounds().getCenter());
+    start_text_.setPosition({game::width / 2.0, game::height / 2.0});
+    start_text_.setScale({0.75, 0.75});
 
     update_top_bar();
 }
@@ -43,7 +43,7 @@ void game::update_top_bar() {
 }
 
 void game::handle_event(const sf::Event& e) {
-    if (e.type == sf::Event::KeyPressed && level_.is_dead()) {
+    if (e.is<sf::Event::KeyPressed>() && level_.is_dead()) {
         level_.restart();
     }
     
@@ -56,7 +56,7 @@ void game::draw_border(sf::RenderTarget& target, sf::RenderStates states) const 
 
     // draw a border around the level
     sf::RectangleShape border{sf::Vector2f{level::width, level::height}};
-    border.move(0, game::top_bar_height);
+    border.move({0, game::top_bar_height});
     border.setFillColor(sf::Color::Transparent);
     border.setOutlineColor(border_color);
     border.setOutlineThickness(border_width);

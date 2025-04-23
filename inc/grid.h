@@ -1,6 +1,7 @@
 #ifndef GRID_H
 #define GRID_H
 
+#include <algorithm>
 #include <cstddef>
 #include <ranges>
 #include <stdexcept>
@@ -86,7 +87,7 @@ void grid<Rows, Columns>::draw(sf::RenderTarget& target, sf::RenderStates states
         pos.x += static_cast<float>(column * tile_size_);
 
         sf::Color color{operator[](row, column)};
-        tile.setPosition(pos.x, pos.y);
+        tile.setPosition({pos.x, pos.y});
         tile.setFillColor(color);
         target.draw(tile, states);
     }

@@ -13,24 +13,24 @@ struct keymap {
 };
 
 constexpr keymap vi_keymap{
-    .up = sf::Keyboard::K,
-    .down = sf::Keyboard::J,
-    .left = sf::Keyboard::H,
-    .right = sf::Keyboard::L,
+    .up = sf::Keyboard::Key::K,
+    .down = sf::Keyboard::Key::J,
+    .left = sf::Keyboard::Key::H,
+    .right = sf::Keyboard::Key::L,
 };
 
 constexpr keymap wasd_keymap{
-    .up = sf::Keyboard::W,
-    .down = sf::Keyboard::S,
-    .left = sf::Keyboard::A,
-    .right = sf::Keyboard::D,
+    .up = sf::Keyboard::Key::W,
+    .down = sf::Keyboard::Key::S,
+    .left = sf::Keyboard::Key::A,
+    .right = sf::Keyboard::Key::D,
 };
 
 constexpr keymap arrow_keymap{
-    .up = sf::Keyboard::Up,
-    .down = sf::Keyboard::Down,
-    .left = sf::Keyboard::Left,
-    .right = sf::Keyboard::Right,
+    .up = sf::Keyboard::Key::Up,
+    .down = sf::Keyboard::Key::Down,
+    .left = sf::Keyboard::Key::Left,
+    .right = sf::Keyboard::Key::Right,
 };
 
 }

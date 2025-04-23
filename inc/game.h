@@ -1,9 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
 #include <keymap.h>
 #include <level.h>
 
@@ -29,8 +29,8 @@ struct game : sf::Drawable {
     static inline const std::string font_file_path{"./SpaceMono-Regular.ttf"};
 private:
     sf::Font font_{};
-    sf::Text score_text_{};
-    sf::Text start_text_{};
+    sf::Text score_text_{font_};
+    sf::Text start_text_{font_};
 
     std::size_t score_{};
     keymap keymap_{vi_keymap};
