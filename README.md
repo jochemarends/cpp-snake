@@ -20,7 +20,7 @@ cmake ..
 cmake --build .
 ```
 
-# Controls
+## Controls
 
 The controls are inspired by Vi motions.
 
