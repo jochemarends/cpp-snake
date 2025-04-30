@@ -6,7 +6,15 @@ configure_file(./SpaceMono-Regular.ttf ./SpaceMono-Regular.ttf COPYONLY)
 
 project(snake LANGUAGES CXX)
 
-find_package(SFML 3.0.0 COMPONENTS System Window Graphics REQUIRED)
+include(FetchContent)
+
+FetchContent_Declare(
+    sfml
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 3.0.0
+)
+
+FetchContent_MakeAvailable(sfml)
 
 add_executable(snake src/main.cpp src/game.cpp src/level.cpp src/snake.cpp src/apple.cpp)
 

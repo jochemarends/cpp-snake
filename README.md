@@ -8,7 +8,6 @@ A snake game written in C++23 using SFML 3.0.
 
 - GCC 14 or later.
 - CMake 3.22 or later.
-- SMFL 3.0 installed and findable by CMake.
 
 ## How to Build
 
