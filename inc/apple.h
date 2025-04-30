@@ -15,7 +15,7 @@ struct apple {
     /**
     * Draw the apple on a grid.
     * 
-    * @parm grid Grid to draw the apple on.
+    * @param grid Grid to draw the apple on.
     */
     template<std::size_t Rows, std::size_t Columns>
     void draw(grid<Rows, Columns>& grid) const;
